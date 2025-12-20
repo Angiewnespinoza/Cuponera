@@ -1,0 +1,15 @@
+{
+  "name": "Cuponera",
+  "short_name": "Cupones",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "img/helado.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

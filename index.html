@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cuponera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Manifest para PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Icono básico -->
+  <link rel="icon" type="image/png" href="img/helado.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Cuponera</h1>
+  </header>
+
+  <main>
+    <section id="coupon-list" class="coupon-list">
+      <!-- Acá se dibujan los cupones desde app.js -->
+    </section>
+  </main>
+
+  <!-- Snackbar / barra de deshacer -->
+  <div id="undo-bar" class="undo-bar hidden">
+    <span id="undo-message">Cupón usado.</span>
+    <button id="undo-button">Deshacer</button>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .catch(err => console.log('SW error', err));
+    }
+  </script>
+</body>
+</html>
