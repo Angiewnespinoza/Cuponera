@@ -1,7 +1,8 @@
 {
   "name": "Cuponera",
-  "short_name": "Cupones",
-  "start_url": "./",
+  "short_name": "Cuponera",
+  "start_url": "/Cuponera/",
+  "scope": "/Cuponera/",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
