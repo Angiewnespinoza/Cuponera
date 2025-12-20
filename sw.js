@@ -1,12 +1,13 @@
 const CACHE_NAME = 'cuponera-cache-v1';
+
 const ASSETS = [
-  './',
-  './index.html',
-  './styles.css',
-  './app.js',
-  './manifest.webmanifest',
-  './img/helado.png',
-  './img/pantallas.png'
+  '/Cuponera/',
+  '/Cuponera/index.html',
+  '/Cuponera/styles.css',
+  '/Cuponera/app.js',
+  '/Cuponera/manifest.webmanifest',
+  '/Cuponera/img/helado.png',
+  '/Cuponera/img/pantallas.png'
 ];
 
 self.addEventListener('install', event => {
@@ -19,9 +20,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       )
     )
   );
