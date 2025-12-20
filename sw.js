@@ -5,7 +5,7 @@ const ASSETS = [
   '/Cuponera/index.html',
   '/Cuponera/styles.css',
   '/Cuponera/app.js',
-  '/Cuponera/manifest.webmnifest',
+  '/Cuponera/manifest.webmanifest',
   '/Cuponera/img/helado.png',
   '/Cuponera/img/pantallas.png'
 ];
