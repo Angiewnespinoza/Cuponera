@@ -1,274 +1,182 @@
-// IndexedDB setup with Dexie
-const db = new Dexie('CuponeraDB');
+// Clave en localStorage
+const STORAGE_KEY = 'cuponera_data_v1';
 
-db.version(1).stores({
-  coupons: '++id, title, description, remainingUses, starLevel, imageId, pinned',
-  images: '++id, name, data',
-  starLevels: 'level, description',
-  admin: 'key, value'
-});
+let state = {
+  coupons: [],
+  lastAction: null // { type: 'USE_COUPON', couponId }
+};
 
-// Data models
-class Coupon {
-  constructor(id, title, description, remainingUses, starLevel, imageId, pinned = false) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.remainingUses = remainingUses;
-    this.starLevel = starLevel;
-    this.imageId = imageId;
-    this.pinned = pinned;
-  }
-}
-
-class Image {
-  constructor(id, name, data) {
-    this.id = id;
-    this.name = name;
-    this.data = data; // base64 string
-  }
-}
-
-class StarLevel {
-  constructor(level, description) {
-    this.level = level;
-    this.description = description;
-  }
-}
-
-// DB Services
-class DBService {
-  static async getAllCoupons() {
-    return await db.coupons.toArray();
-  }
-
-  static async addCoupon(coupon) {
-    return await db.coupons.add(coupon);
-  }
-
-  static async updateCoupon(coupon) {
-    return await db.coupons.put(coupon);
-  }
-
-  static async deleteCoupon(id) {
-    return await db.coupons.delete(id);
-  }
-
-  static async getAllImages() {
-    return await db.images.toArray();
-  }
-
-  static async addImage(image) {
-    return await db.images.add(image);
-  }
-
-  static async deleteImage(id) {
-    return await db.images.delete(id);
-  }
-
-  static async getStarLevels() {
-    const levels = await db.starLevels.toArray();
-    return levels.sort((a, b) => a.level - b.level);
-  }
-
-  static async updateStarLevel(level, description) {
-    return await db.starLevels.put({ level, description });
-  }
-
-  static async getAdminSetting(key) {
-    const item = await db.admin.get(key);
-    return item ? item.value : null;
-  }
-
-  static async setAdminSetting(key, value) {
-    return await db.admin.put({ key, value });
-  }
-}
-
-// Initialization
-async function initializeDB() {
-  const coupons = await DBService.getAllCoupons();
-  if (coupons.length === 0) {
-    // Seed with sample data
-    // Sample images (base64 placeholders, in real app load from files)
-    const sampleImages = [
-      { name: 'helado.png', data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' }, // dummy
-      { name: 'pantallas.png', data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' } // dummy
-    ];
-    for (const img of sampleImages) {
-      await DBService.addImage(new Image(null, img.name, img.data));
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      state = JSON.parse(raw);
+      return;
+    } catch (e) {
+      console.error('Error leyendo localStorage, reseteando', e);
     }
-    const images = await DBService.getAllImages();
-    const heladoId = images.find(i => i.name === 'helado.png').id;
-    const pantallasId = images.find(i => i.name === 'pantallas.png').id;
-
-    const sampleCoupons = [
-      new Coupon(null, 'Vale por un helado', 'Un helado a elección.', 3, 3, heladoId, false),
-      new Coupon(null, '1 hora de pantalla', 'Videojuegos / tablet / compu 1 hora.', 5, 4, pantallasId, false)
-    ];
-    for (const coupon of sampleCoupons) {
-      await DBService.addCoupon(coupon);
-    }
-
-    // Star levels
-    const sampleStars = [
-      new StarLevel(1, 'Básico'),
-      new StarLevel(2, 'Intermedio'),
-      new StarLevel(3, 'Avanzado'),
-      new StarLevel(4, 'Experto'),
-      new StarLevel(5, 'Maestro')
-    ];
-    for (const star of sampleStars) {
-      await DBService.updateStarLevel(star.level, star.description);
-    }
-
-    // Admin password: default 'admin' hashed
-    const salt = 'randomsalt'; // in real app generate random
-    const hash = await hashPassword('admin', salt);
-    await DBService.setAdminSetting('passwordHash', hash);
-    await DBService.setAdminSetting('salt', salt);
   }
+
+  // Estado inicial por defecto
+  state = {
+    coupons: [
+      {
+        id: 'helado',
+        title: 'Vale por un helado',
+        description: 'Un helado a elección.',
+        count: 3,
+        imageUrl: 'img/helado.png'
+      },
+      {
+        id: 'pantallas',
+        title: '1 hora de pantalla',
+        description: 'Videojuegos / tablet / compu 1 hora.',
+        count: 5,
+        imageUrl: 'img/pantallas.png'
+      }
+    ],
+    lastAction: null
+  };
+
+  saveState();
 }
 
-async function hashPassword(password, salt) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + salt);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-// App state
-let currentMode = 'kid'; // 'kid' or 'admin'
-let coupons = [];
-let starLevels = [];
+function renderCoupons() {
+  const container = document.getElementById('coupon-list');
+  container.innerHTML = '';
 
-// UI elements
-const couponList = document.getElementById('coupon-list');
-
-// Load data
-async function loadData() {
-  coupons = await DBService.getAllCoupons();
-  starLevels = await DBService.getStarLevels();
-}
-
-// Render kid mode
-function renderKidMode() {
-  couponList.innerHTML = '';
-  // Sort: pinned first, then by star level desc
-  const sortedCoupons = [...coupons].sort((a, b) => {
-    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-    return b.starLevel - a.starLevel;
-  });
-
-  sortedCoupons.forEach(coupon => {
+  state.coupons.forEach(coupon => {
     const card = document.createElement('article');
     card.className = 'coupon-card';
 
     const img = document.createElement('img');
     img.className = 'coupon-image';
-    // Get image data
-    DBService.getAllImages().then(images => {
-      const image = images.find(i => i.id === coupon.imageId);
-      if (image) img.src = image.data;
-    });
+    img.src = coupon.imageUrl;
+    img.alt = coupon.title;
 
     const content = document.createElement('div');
     content.className = 'coupon-content';
 
-    const title = document.createElement('h3');
+    const title = document.createElement('div');
+    title.className = 'coupon-title';
     title.textContent = coupon.title;
 
-    const uses = document.createElement('p');
-    uses.textContent = `Usos restantes: ${coupon.remainingUses}`;
+    const desc = document.createElement('div');
+    desc.className = 'coupon-counter';
+    desc.textContent = coupon.description;
 
-    const stars = document.createElement('div');
-    stars.className = 'stars';
-    for (let i = 1; i <= 5; i++) {
-      const star = document.createElement('span');
-      star.textContent = i <= coupon.starLevel ? '★' : '☆';
-      star.className = 'star';
-      star.addEventListener('click', () => showStarModal(coupon.starLevel));
-      stars.appendChild(star);
-    }
+    const counter = document.createElement('div');
+    counter.className = 'coupon-counter';
+    counter.textContent = `Cupones disponibles: ${coupon.count}`;
 
     content.appendChild(title);
-    content.appendChild(uses);
-    content.appendChild(stars);
+    content.appendChild(desc);
+    content.appendChild(counter);
 
-    const redeemBtn = document.createElement('button');
-    redeemBtn.textContent = 'Canjear';
-    redeemBtn.disabled = coupon.remainingUses <= 0;
-    redeemBtn.addEventListener('click', () => redeemCoupon(coupon));
+    const actions = document.createElement('div');
+    actions.className = 'coupon-actions';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'btn-share';
+    shareBtn.textContent = 'Compartir';
+    shareBtn.disabled = coupon.count <= 0;
+    shareBtn.addEventListener('click', () => handleShare(coupon.id));
+
+    const infoBtn = document.createElement('button');
+    infoBtn.className = 'btn-info';
+    infoBtn.textContent = 'Ver detalle';
+    infoBtn.addEventListener('click', () => {
+      alert(`${coupon.title}\n\n${coupon.description}\n\nDisponibles: ${coupon.count}`);
+    });
+
+    actions.appendChild(shareBtn);
+    actions.appendChild(infoBtn);
 
     card.appendChild(img);
     card.appendChild(content);
-    card.appendChild(redeemBtn);
+    card.appendChild(actions);
 
-    couponList.appendChild(card);
+    container.appendChild(card);
   });
 }
 
-// Modals
-function showStarModal(level) {
-  const desc = starLevels.find(s => s.level === level)?.description || 'Sin descripción';
-  alert(`Nivel ${level}: ${desc}`);
-}
+function showUndoBar(message) {
+  const bar = document.getElementById('undo-bar');
+  const msg = document.getElementById('undo-message');
+  msg.textContent = message || 'Cupón usado.';
+  bar.classList.remove('hidden');
 
-async function redeemCoupon(coupon) {
-  if (confirm(`¿Canjear "${coupon.title}"?`)) {
-    coupon.remainingUses -= 1;
-    await DBService.updateCoupon(coupon);
-    await loadData();
-    renderKidMode();
-    showConfetti();
-    showCelebrationModal(coupon.title);
+  // Autoocultar después de 10s
+  if (state.undoTimeoutId) {
+    clearTimeout(state.undoTimeoutId);
   }
+  state.undoTimeoutId = setTimeout(() => {
+    hideUndoBar();
+    state.lastAction = null;
+    saveState();
+  }, 10000);
 }
 
-function showConfetti() {
-  // Simple confetti animation
-  const confetti = document.createElement('div');
-  confetti.className = 'confetti';
-  document.body.appendChild(confetti);
-  setTimeout(() => document.body.removeChild(confetti), 3000);
+function hideUndoBar() {
+  const bar = document.getElementById('undo-bar');
+  bar.classList.add('hidden');
 }
 
-function showCelebrationModal(title) {
-  alert(`¡Cupón canjeado: ${title}!`);
-  // Share
+function handleShare(couponId) {
+  const coupon = state.coupons.find(c => c.id === couponId);
+  if (!coupon || coupon.count <= 0) return;
+
+  // Descontar uno y guardar acción para poder deshacer
+  coupon.count -= 1;
+  state.lastAction = {
+    type: 'USE_COUPON',
+    couponId: coupon.id
+  };
+  saveState();
+  renderCoupons();
+  showUndoBar(`Cupón "${coupon.title}" usado. Podés deshacer.`);
+
+  const shareText = `${coupon.title} - ${coupon.description}`;
+  const shareUrl = coupon.imageUrl; // si es URL absoluta mejor
+
   if (navigator.share) {
     navigator.share({
-      title: 'Cupón canjeado',
-      text: `He canjeado: ${title}`,
-      url: window.location.href
+      text: shareText,
+      url: shareUrl
+    }).catch(err => {
+      console.log('Compartir cancelado o falló', err);
+      // Igual dejamos la opción de deshacer
     });
-  }
-}
-
-// Admin mode
-function renderAdminMode() {
-  couponList.innerHTML = '<h2>Modo Admin</h2><button id="back-to-kid">Volver a modo niño</button>';
-  document.getElementById('back-to-kid').addEventListener('click', () => {
-    currentMode = 'kid';
-    render();
-  });
-  // Add sections for image manager, coupon manager, etc.
-  // For brevity, placeholder
-}
-
-// Render
-function render() {
-  if (currentMode === 'kid') {
-    renderKidMode();
   } else {
-    renderAdminMode();
+    // Fallback mínimo
+    alert('Compartí esta imagen/manualmente:\n\n' + shareUrl);
   }
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', async () => {
-  await initializeDB();
-  await loadData();
-  render();
+function handleUndo() {
+  const action = state.lastAction;
+  if (!action || action.type !== 'USE_COUPON') return;
+
+  const coupon = state.coupons.find(c => c.id === action.couponId);
+  if (!coupon) return;
+
+  coupon.count += 1;
+  state.lastAction = null;
+  saveState();
+  renderCoupons();
+  hideUndoBar();
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  renderCoupons();
+
+  document
+    .getElementById('undo-button')
+    .addEventListener('click', handleUndo);
 });

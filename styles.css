@@ -12,9 +12,7 @@ body {
 
 .app-header {
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   background: #111827;
   color: #f9fafb;
 }
