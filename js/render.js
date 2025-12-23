@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { handleShare } from './actions.js';
+import { handleShare, openDetailModal} from './actions.js';
 
 export function renderCoupons() {
   const container = document.getElementById('coupon-list');
@@ -48,8 +48,7 @@ export function renderCoupons() {
     const infoBtn = document.createElement('button');
     infoBtn.className = 'btn-info';
     infoBtn.textContent = 'DETALLE';
-    infoBtn.onclick = () =>
-      alert(`${coupon.title}\n\n${coupon.description}\n\nDisponibles: ${coupon.count}`);
+    infoBtn.onclick = () => openDetailModal(coupon.id);
 
     actions.appendChild(useBtn);
     actions.appendChild(infoBtn);

@@ -1,0 +1,113 @@
+/* ===== Modal Detail Screen ===== */
+
+.modal-sheet {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #bfefff 0%, #7dd3fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* ===== Card ===== */
+
+.modal-card {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 22px 20px 26px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 6px rgba(125, 211, 252, 0.35);
+  text-align: center;
+  animation: pop-in 0.25s ease-out;
+}
+
+/* ===== Image ===== */
+
+.detail-image {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+
+/* ===== Title ===== */
+
+.detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+/* ===== Category Pill ===== */
+
+.detail-pill {
+  display: inline-block;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+/* ===== Terms ===== */
+
+.detail-section {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.detail-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.detail-list {
+  padding-left: 18px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.detail-list li {
+  margin-bottom: 4px;
+}
+
+/* ===== Buttons (reuse redeemed style) ===== */
+
+.modal-card .btn-primary {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+  box-shadow:
+    0 6px 0 #16a34a,
+    0 10px 20px rgba(34, 197, 94, 0.35);
+  cursor: pointer;
+}
+
+.modal-card .btn-primary:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 4px 0 #16a34a,
+    0 6px 14px rgba(34, 197, 94, 0.35);
+}
+
+.modal-card .btn-ghost {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  cursor: pointer;
+}

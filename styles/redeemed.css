@@ -1,0 +1,114 @@
+/* ===== Redeemed Screen ===== */
+
+.redeemed-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #bfefff 0%, #7dd3fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.redeemed-content {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 22px 20px 26px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 6px rgba(125, 211, 252, 0.35);
+  text-align: center;
+  animation: pop-in 0.25s ease-out;
+}
+
+/* ===== Icon / Image ===== */
+
+.redeemed-image {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+
+/* ===== Title ===== */
+
+.redeemed-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+/* ===== Subtitle ===== */
+
+.redeemed-sub {
+  display: inline-block;
+  background: #22c55e;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+/* ===== Check ===== */
+
+.redeemed-check {
+  font-size: 44px;
+  color: #22c55e;
+  margin: 10px 0 16px;
+}
+
+/* ===== Buttons ===== */
+
+.redeemed-content .btn-primary {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+  box-shadow:
+    0 6px 0 #16a34a,
+    0 10px 20px rgba(34, 197, 94, 0.35);
+  cursor: pointer;
+}
+
+.redeemed-content .btn-primary:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 4px 0 #16a34a,
+    0 6px 14px rgba(34, 197, 94, 0.35);
+}
+
+.redeemed-content .btn-ghost {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.coupon-image {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+}
+
+/* ===== Animation ===== */
+
+@keyframes pop-in {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

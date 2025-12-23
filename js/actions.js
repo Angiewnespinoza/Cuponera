@@ -1,13 +1,16 @@
 import { useCoupon, undoCoupon } from './api.js';
 import { loadState } from './storage.js';
 import { renderCoupons } from './render.js';
+import { loadTemplate, cloneTemplate } from './templates.js';
+import { state } from './state.js';
 
 export async function handleShare(coupon) {
   try {
+    closeModal();               // ← CLAVE
     await useCoupon(coupon.id);
     await loadState();
     renderCoupons();
-    showRedeemedScreen(coupon.title);
+    showRedeemedScreen(coupon);
   } catch (e) {
     alert(e.message);
   }
@@ -38,60 +41,80 @@ function ensureModalRoot() {
     root = document.createElement('div');
     root.id = 'modal-root';
     root.className = 'modal-root hidden';
+    root.innerHTML = `<div class="modal-content"></div>`;
     document.body.appendChild(root);
   }
   return root;
 }
-function closeModal() {
+
+
+export function closeModal() {
   const root = ensureModalRoot();
   root.classList.add('hidden');
-  root.innerHTML = '';
+  root.querySelector('.modal-content').innerHTML = '';
 }
 
 window.closeModal = closeModal;
 
-export function openDetailModal(couponId) {
+export async function openDetailModal(couponId) {
   const coupon = state.coupons.find(c => c.id === couponId);
   if (!coupon) return;
 
+  await loadTemplate('/templates/modal-detail.html');
+
   const root = ensureModalRoot();
+  const content = root.querySelector('.modal-content');
+
   root.classList.remove('hidden');
-  root.innerHTML = `
-    <div class="modal-backdrop" onclick="closeModal()"></div>
-    <div class="modal-sheet">
-      <div class="modal-card">
-        <img class="detail-image" src="${coupon.imageUrl}" alt="${escapeHtml(coupon.titulo)}">
-        <h2 class="detail-title">${escapeHtml(coupon.titulo)}</h2>
-        <div class="detail-pill">${escapeHtml(coupon.categoria)}</div>
+  content.innerHTML = '';
 
-        <div class="detail-section">
-          <div class="detail-label">Términos del cupón:</div>
-          <ul class="detail-list">
-            ${coupon.descripcion.map(x => `<li>${escapeHtml(x)}</li>`).join('')}
-          </ul>
-        </div>
+  const node = cloneTemplate('tpl-modal-detail');
+  content.appendChild(node);
 
-        <button class="btn-primary" ${coupon.usos<=0?'disabled':''} onclick="handleUse('${coupon.id}')">USAR AHORA</button>
-        <button class="btn-ghost" onclick="closeModal()">CERRAR</button>
-      </div>
-    </div>
-  `;
+  console.log(root.querySelectorAll('img'));
+
+  root.querySelector('[data-image]').src = coupon.imageUrl;
+  root.querySelector('[data-title]').textContent = coupon.title;
+  root.querySelector('[data-category]').textContent = coupon.categoria || '';
+
+  const list = root.querySelector('[data-description]');
+  list.innerHTML = coupon.description;//.map(x => `<li>${x}</li>`).join('');
+
+  root.querySelector('[data-use]').onclick = () => handleShare(coupon);
+
+  root.querySelectorAll('[data-close]').forEach(el => {
+    el.onclick = closeModal;
+  });
 }
 
 
-//TODO el handleUndo podria mostrar algo mas
-function showRedeemedScreen(titulo) {
+export async function showRedeemedScreen(coupon) {
+  await loadTemplate('/templates/redeemed.html');
+
   const root = ensureModalRoot();
   root.classList.remove('hidden');
-  root.innerHTML = `
-    <div class="redeemed-screen">
-      <div class="redeemed-content">
-        <div class="redeemed-title">¡Cupón canjeado!</div>
-        <div class="redeemed-sub">Disfrutá tu ${escapeHtml(titulo)}</div>
-        <div class="redeemed-check">✓</div>
-        <button class="btn-primary" onclick="closeModal();">¡ENTENDIDO!</button>
-        <button" onclick="handleUndo(); closeModal();">¡ENTENDIDO!</button>
-      </div>
-    </div>
-  `;
+  
+  const content = root.querySelector('.modal-content');
+  content.innerHTML = ''; // LIMPIA MODAL ACTUAL
+
+  const node = cloneTemplate('tpl-redeemed');
+  content.appendChild(node);
+
+  // Texto
+  const titleEl = root.querySelector('[data-title]');
+  titleEl.textContent = `Disfrutá tu ${coupon.title}`;
+
+  // Imagen (TIENE que ser un <img>)
+  const imgEl = root.querySelector('img[data-image]');
+  imgEl.src = coupon.imageUrl;
+  imgEl.alt = coupon.title;
+
+  // Cerrar
+  root.querySelector('[data-close]').addEventListener('click', closeModal);
+
+  // Undo
+  root.querySelector('[data-undo]').addEventListener('click', async () => {
+    await handleUndo();
+    closeModal();
+  });
 }
