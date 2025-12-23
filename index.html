@@ -1,45 +1,28 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cuponera</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Manifest para PWA -->
-  <link rel="manifest" href="/Cuponera/manifest.webmnifest">
-
-  <!-- Icono básico -->
-  <link rel="icon" type="image/png" href="img/helado.png">
-
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cuponera - Lista</title>
+  <link rel="stylesheet" href="./list.css" />
+  <script src="./app.js"></script>
 </head>
-<body>
-  <header class="app-header">
-    <h1>Cuponera</h1>
-  </header>
+<body class="background-bg">
 
-  <main>
-    <section id="coupon-list" class="coupon-list">
-      <!-- Acá se dibujan los cupones desde app.js -->
-    </section>
-  </main>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="topbar-h1">Cuponera</div>
+        <div class="topbar-h2">✦ Mis Vouchers</div>
+      </div>
+    </header>
 
-  <!-- Snackbar / barra de deshacer -->
-  <div id="undo-bar" class="undo-bar hidden">
-    <span id="undo-message">Cupón usado.</span>
-    <button id="undo-button">Deshacer</button>
+    <main class="content">
+      <section class="list" id="coupon-list">
+
+      </section>
+    </main>
   </div>
 
-  <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .catch(err => console.log('SW error', err));
-    }
-  </script>
 </body>
-
 </html>
-
-
-
