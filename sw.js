@@ -7,7 +7,10 @@ const ASSETS = [
   '/Cuponera/app.js',
   '/Cuponera/manifest.webmnifest',
   '/Cuponera/img/helado.png',
-  '/Cuponera/img/pantallas.png'
+  '/Cuponera/img/pantallas.png',
+  '/Cuponera/coupons.json',
+  '/Cuponera/img/background.png'
+
 ];
 
 self.addEventListener('install', event => {

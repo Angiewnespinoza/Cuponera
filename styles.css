@@ -1,121 +1,92 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+body{
+  background: url("img/background.png") center/cover fixed no-repeat;
+  color:#0b1020;
 }
 
-body {
-  background: #f4f4f5;
-  color: #111827;
+.app-header{
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  color:#0b1020;
 }
 
-.app-header {
-  padding: 1rem;
-  text-align: center;
-  background: #111827;
-  color: #f9fafb;
+.coupon-card{
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.45);
 }
 
-main {
-  padding: 1rem;
+.coupon-pill{
+  margin-top: 6px;
+  display:inline-flex;
+  padding:6px 12px;
+  border-radius:999px;
+  background: rgba(34,197,94,0.20);
+  border:1px solid rgba(34,197,94,0.35);
+  color:#0b5a2a;
+  font-weight:700;
+  width: fit-content;
 }
 
-.coupon-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.btn-use, .btn-primary{
+  border:none;
+  border-radius:999px;
+  padding:0.45rem 0.9rem;
+  font-weight:800;
+  background: linear-gradient(180deg,#34d399,#16a34a);
+  color:white;
 }
 
-.coupon-card {
-  background: #ffffff;
-  border-radius: 0.75rem;
-  padding: 0.75rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.btn-ghost{
+  border:none;
+  border-radius:999px;
+  padding:0.45rem 0.9rem;
+  font-weight:800;
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(2,132,199,0.25);
+  color:#0b4a6e;
 }
 
-.coupon-image {
-  width: 64px;
-  height: 64px;
-  border-radius: 0.5rem;
-  object-fit: cover;
-  flex-shrink: 0;
+/* Modal */
+.modal-root.hidden{display:none;}
+.modal-backdrop{position:fixed; inset:0; background: rgba(0,0,0,0.35);}
+.modal-sheet{position:fixed; inset:0; display:grid; place-items:center; padding:18px;}
+.modal-card{
+  width:min(420px,92vw);
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(14px);
+  border-radius:22px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.22);
+  text-align:center;
 }
+.detail-image{width:110px;height:110px;border-radius:22px;object-fit:cover;margin:8px auto 10px;}
+.detail-title{font-size:22px;font-weight:900;margin:4px 0 6px;}
+.detail-pill{margin:0 auto 12px; display:inline-flex; padding:6px 12px; border-radius:999px; background: rgba(59,130,246,0.14); border:1px solid rgba(59,130,246,0.25); color:#1e3a8a; font-weight:800;}
+.detail-section{text-align:left; margin:10px 0 14px;}
+.detail-label{font-weight:900;margin-bottom:6px;}
+.detail-list{padding-left:18px; color: rgba(15,23,42,0.8); font-weight:600;}
 
-.coupon-content {
-  flex: 1;
+/* Redeemed full */
+.redeemed-screen{
+  position:fixed; inset:0;
+  background: url("img/background.png") center/cover no-repeat;
+  display:grid; place-items:center;
 }
-
-.coupon-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+.redeemed-content{
+  width:min(420px,92vw);
+  text-align:center;
+  color:white;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.35);
 }
-
-.coupon-counter {
-  font-size: 0.9rem;
-  color: #4b5563;
-}
-
-.coupon-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
-}
-
-.coupon-actions button {
-  border: none;
-  border-radius: 999px;
-  padding: 0.35rem 0.8rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.btn-share {
-  background: #2563eb;
-  color: #f9fafb;
-}
-
-.btn-share:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-info {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-/* Barra de deshacer */
-.undo-bar {
-  position: fixed;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
-  background: #111827;
-  color: #f9fafb;
-  padding: 0.6rem 1rem;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-.undo-bar.hidden {
-  display: none;
-}
-
-#undo-button {
-  border: none;
-  border-radius: 999px;
-  padding: 0.25rem 0.75rem;
-  background: #f97316;
-  color: #111827;
-  font-weight: 600;
-  cursor: pointer;
+.redeemed-title{font-size:28px;font-weight:1000;margin-bottom:8px;}
+.redeemed-sub{font-size:16px;font-weight:700;opacity:0.92;margin-bottom:16px;}
+.redeemed-check{
+  width:88px;height:88px;border-radius:999px;
+  margin:0 auto 18px;
+  background: rgba(34,197,94,0.95);
+  display:grid;place-items:center;
+  font-size:44px;font-weight:1000;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.28);
 }
