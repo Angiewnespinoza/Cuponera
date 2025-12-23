@@ -3,12 +3,10 @@ const CACHE_NAME = 'cuponera-cache-v1';
 const ASSETS = [
   '/Cuponera/',
   '/Cuponera/index.html',
-  '/Cuponera/styles.css',
   '/Cuponera/app.js',
   '/Cuponera/manifest.webmanifest',
   '/Cuponera/img/helado.png',
   '/Cuponera/img/pantallas.png',
-  '/Cuponera/coupons.json',
   '/Cuponera/img/background.png'
 
 ];
