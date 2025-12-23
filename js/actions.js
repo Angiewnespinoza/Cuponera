@@ -1,6 +1,6 @@
 import { useCoupon, undoCoupon } from './api.js';
 import { loadState } from './storage.js';
-import { renderCoupons } from './render.js';
+import { renderCoupons, renderStars } from './render.js';
 import { loadTemplate, cloneTemplate } from './templates.js';
 import { state } from './state.js';
 
@@ -56,8 +56,8 @@ export function closeModal() {
 
 window.closeModal = closeModal;
 
-export async function openDetailModal(couponId) {
-  const coupon = state.coupons.find(c => c.id === couponId);
+export async function openDetailModal(cupon) {
+  const coupon = state.coupons.find(c => c.id === cupon.id);
   if (!coupon) return;
 
   await loadTemplate('/templates/modal-detail.html');
@@ -70,8 +70,8 @@ export async function openDetailModal(couponId) {
 
   const node = cloneTemplate('tpl-modal-detail');
   content.appendChild(node);
-
-  console.log(root.querySelectorAll('img'));
+  
+  renderStars(cupon);
 
   root.querySelector('[data-image]').src = coupon.imageUrl;
   root.querySelector('[data-title]').textContent = coupon.title;

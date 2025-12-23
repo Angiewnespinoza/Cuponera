@@ -1,64 +1,69 @@
 import { state } from './state.js';
 import { handleShare, openDetailModal} from './actions.js';
+import { loadTemplate, cloneTemplate } from './templates.js';
 
-export function renderCoupons() {
+export async function renderCoupons() {
+  await loadTemplate('/templates/coupon-card.html');
+
   const container = document.getElementById('coupon-list');
   container.innerHTML = '';
 
   state.coupons.forEach(coupon => {
-    const card = document.createElement('article');
-    card.className = 'coupon-card';
+    const node = cloneTemplate('tpl-coupon-card');
 
-    const divImg = document.createElement('div');
-    divImg.className = "coupon-left";
+    node.querySelector('[data-image]').src = coupon.imageUrl;
+    node.querySelector('[data-image]').alt = coupon.title;
+    node.querySelector('[data-title]').textContent = coupon.title;
+    node.querySelector('[data-count]').textContent = `Cupones disponibles: ${coupon.count}`;
+    node.querySelector('#stars-wrapper').id = 'stars-wrapper' + coupon.id;
+    node.querySelector('#stars').id = 'stars' + coupon.id;
+    node.querySelector('#tooltip').id = 'tooltip' + coupon.id;
 
-    const img = document.createElement('img');
-    img.className = 'coupon-avatar';
-    img.src = coupon.imageUrl;
-    img.alt = coupon.title;
-
-    const content = document.createElement('div');
-    content.className = 'coupon-mid';
-
-    const title = document.createElement('div');
-    title.className = 'coupon-title';
-    title.textContent = coupon.title;
-
-    const pill = document.createElement('div');
-    pill.className = 'coupon-pill';
-    pill.textContent = coupon.stars.id;
-
-    const counter = document.createElement('div');
-    counter.className = 'coupon-meta';
-    counter.textContent = `Cupones disponibles: ${coupon.count}`;
-
-    content.appendChild(title);
-    content.appendChild(pill);
-    content.appendChild(counter);
-
-    const actions = document.createElement('div');
-    actions.className = 'coupon-right';
-
-    const useBtn = document.createElement('button');
-    useBtn.className = 'btn btn-primary';
-    useBtn.textContent = 'USAR';
+    const useBtn = node.querySelector('[data-use]');
     useBtn.disabled = coupon.count <= 0;
     useBtn.onclick = () => handleShare(coupon);
 
-    const infoBtn = document.createElement('button');
-    infoBtn.className = 'btn-info';
-    infoBtn.textContent = 'DETALLE';
-    infoBtn.onclick = () => openDetailModal(coupon.id);
+    node.querySelector('[data-detail]').onclick =
+      () => openDetailModal(coupon);
 
-    actions.appendChild(useBtn);
-    actions.appendChild(infoBtn);
+    container.appendChild(node);
 
-    divImg.appendChild(img);
-
-    card.appendChild(divImg);
-    card.appendChild(content);
-    card.appendChild(actions);
-
-    container.appendChild(card);
+    renderStars(coupon);
   });
+}
+
+export function renderStars(cupon){
+    // Carga de estrellas  
+    const rating = cupon.stars.nivel;
+    const tooltipText = cupon.stars.descripcion;
+    const total = 5;
+    const wrapper = document.querySelector('#stars-wrapper' + cupon.id);
+    const starsContainer = document.getElementById('stars' + cupon.id);
+    const tooltip = wrapper.querySelector('#tooltip' + cupon.id);
+
+    tooltip.textContent = tooltipText;
+
+    starsContainer.innerHTML = '';
+
+    // Render estrellas
+    for (let i = 0; i < 5; i++) {
+    const star = document.createElement('span');
+    star.className = 'star' + (i < rating ? ' on' : '');
+    star.textContent = '★';
+    starsContainer.appendChild(star);
+    }
+
+    // PC: hover
+    wrapper.addEventListener('mouseenter', () => {
+        wrapper.classList.add('show-tooltip');
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+        wrapper.classList.remove('show-tooltip');
+    });
+
+    // Mobile: tap
+    wrapper.addEventListener('touchstart', () => {
+        wrapper.classList.toggle('show-tooltip');
+    });
 }
