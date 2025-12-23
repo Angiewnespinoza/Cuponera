@@ -1,0 +1,52 @@
+<template id="tpl-modal-admin">
+  <div class="modal-sheet">
+    <div class="modal-card admin-card">
+
+      <!-- PIN -->
+      <section data-step="pin">
+        <h2 class="admin-title">Acceso de adultos</h2>
+        <input
+          type="password"
+          maxlength="4"
+          inputmode="numeric"
+          placeholder="PIN"
+          data-pin
+        />
+        <button class="btn-primary" data-pin-submit>INGRESAR</button>
+      </section>
+
+      <!-- PANEL -->
+      <section data-step="panel" hidden>
+
+        <div class="admin-tabs">
+          <button data-tab="coupon">Cupón</button>
+          <button data-tab="image">Imagen</button>
+        </div>
+
+        <!-- Alta cupón -->
+        <form data-panel="coupon" hidden>
+          <input placeholder="Título" data-title required />
+          <textarea placeholder="Descripción" data-description></textarea>
+          <input type="number" placeholder="Usos" data-uses min="1" />
+
+          <select data-category></select>
+          <select data-image></select>
+          <select data-restriction></select>
+
+          <button class="btn-primary">GUARDAR CUPÓN</button>
+        </form>
+
+        <!-- Alta imagen -->
+        <form data-panel="image" hidden>
+          <input placeholder="Descripción" data-img-desc required />
+          <input type="file" accept="image/*" data-img-file required />
+
+          <button class="btn-primary">SUBIR IMAGEN</button>
+        </form>
+
+      </section>
+
+      <button class="btn-ghost" data-close>CERRAR</button>
+    </div>
+  </div>
+</template>
