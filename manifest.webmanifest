@@ -1,8 +1,8 @@
 {
   "name": "Cuponera",
   "short_name": "Cuponera",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/cuponerita",
+  "scope": "/cuponerita",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
