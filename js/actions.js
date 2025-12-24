@@ -111,10 +111,6 @@ export async function showRedeemedScreen(coupon) {
   const node = cloneTemplate('tpl-redeemed');
   content.appendChild(node);
 
-  // Texto
-  const titleEl = root.querySelector('[data-title]');
-  titleEl.textContent = `Disfrutá tu ${coupon.title}`;
-
   // Imagen (TIENE que ser un <img>)
   const imgEl = root.querySelector('img[data-image]');
   imgEl.src = coupon.imageUrl;
