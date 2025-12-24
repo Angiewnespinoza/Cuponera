@@ -2,17 +2,26 @@ import { useCoupon, undoCoupon } from './api.js';
 import { loadState } from './storage.js';
 import { renderCoupons, renderStars } from './render.js';
 import { loadTemplate, cloneTemplate } from './templates.js';
+import { confirmRedeem } from './modal-confirm.js';
 import { state } from './state.js';
 
 export async function handleShare(coupon) {
   try {
-    closeModal();               // ← CLAVE
+    await confirmRedeem();       // NUEVO PASO
+  } catch (e){
+    // cancelado
+    return;
+  }
+
+  try {
+    closeModal();               // CLAVE
     await useCoupon(coupon.id);
     await loadState();
     renderCoupons();
     showRedeemedScreen(coupon);
   } catch (e) {
     alert(e.message);
+    console.log(e);
   }
 }
 
@@ -73,16 +82,16 @@ export async function openDetailModal(cupon) {
   
   renderStars(cupon);
 
-  root.querySelector('[data-image]').src = coupon.imageUrl;
-  root.querySelector('[data-title]').textContent = coupon.title;
-  root.querySelector('[data-category]').textContent = coupon.categoria || '';
+  node.querySelector('[data-image]').src = coupon.imageUrl;
+  node.querySelector('[data-title]').textContent = coupon.title;
+  node.querySelector('[data-category]').textContent = coupon.categoria || '';
 
-  const list = root.querySelector('[data-description]');
+  const list = node.querySelector('[data-description]');
   list.innerHTML = coupon.description;//.map(x => `<li>${x}</li>`).join('');
 
-  root.querySelector('[data-use]').onclick = () => handleShare(coupon);
+  node.querySelector('[data-use]').onclick = () => handleShare(coupon);
 
-  root.querySelectorAll('[data-close]').forEach(el => {
+  node.querySelectorAll('[data-close]').forEach(el => {
     el.onclick = closeModal;
   });
 }

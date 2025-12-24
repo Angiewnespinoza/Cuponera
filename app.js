@@ -4,6 +4,7 @@ import { fetchCoupons } from './js/api.js';
 import { state } from './js/state.js';
 import { saveState } from './js/storage.js';
 import { openAdminModal } from './js/actions-admin.js';
+import { loadTemplate } from './js/templates.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadState();
@@ -27,3 +28,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     .getElementById('btn-admin')
     .addEventListener('click', openAdminModal);
 });
+
+await loadTemplate('/templates/confirm-redeem.html');
