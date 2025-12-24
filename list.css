@@ -13,13 +13,13 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   min-height: 100vh;
   display: grid;
   place-items: start center;
-  padding: 18px;
 }
 
 /* Contenedor “móvil” */
 .content{
   width: min(420px, 100%);
   padding-bottom: 84px; /* espacio para bottom nav */
+  margin-top: 20px;
 }
 
 /* Topbar glass */
@@ -30,11 +30,9 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   gap: 10px;
   padding: 10px 10px 12px;
   border-radius: 22px;
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.35);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+  background: rgba(255,255,255,80%);
   margin-bottom: 12px;
+  border-radius: 0 0 30px 15px;
 }
 
 .icon-btn{
@@ -50,9 +48,10 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 
 .topbar-title{ line-height: 1.1; }
 .topbar-h1{
-  font-size: 18px;
-  font-weight: 900;
-  color: rgba(15,23,42,0.95);
+    margin-left: 40px;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgb(12 19 41);
 }
 .topbar-h2{
   font-size: 13px;
@@ -80,11 +79,13 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     grid-column: 3;
     align-self: start;
     text-align: right !important;
+    padding:0!important;
 }
 
 .dashed{
     border-top: 2px dashed rgba(0, 0, 0, 0.13);
 }
+
 
 /* ===== Ticket shape (mordidas laterales) ===== */
 .coupon-card{
@@ -96,9 +97,10 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     backdrop-filter: none;
     border-radius: 10px;
     overflow: hidden;
-    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 3px 5px rgb(0, 0, 0, 50%));
     display: grid;
     padding: 10px 20px;
+    margin: 0 18px;
   }
   
   /* Capa de fondo con mordidas */
@@ -111,7 +113,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     height: 100%;
     z-index: -1;
   }
-  
+
   /* Fondo principal + mordida izquierda */
   .coupon-card::before{
     background-image: radial-gradient(
@@ -183,8 +185,12 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 }
 
 .btn-info{
-    background-color: transparent;
+    background-color: #005871;
     border: none;
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
+    color: white;
 }
 
 /* Bottom nav */
@@ -221,10 +227,8 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 }
 
 .btn-admin {
-  background: rgba(127, 127, 127);
   font-size: 18px;
   cursor: pointer;
-  opacity: 0.4;
   margin-left: auto;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 22px;
