@@ -248,3 +248,51 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 .btn-admin:hover {
   opacity: 1;
 }
+
+
+/* LE cupon dorado */
+.coupon-card.gold::before{
+  background-image: radial-gradient(
+      circle at 0 50%,
+      transparent 20px,
+      rgba(191, 164, 74, 0.9) 21px,
+      rgba(191, 164, 74, 0.9) 21px
+    );
+}
+
+
+.coupon-card.gold::after{
+  background-image: radial-gradient(
+      circle at 100% 50%,
+      transparent 20px,
+      rgba(191, 164, 74, 0.9) 21px
+    );
+}
+
+.coupon-card.gold { 
+  background: linear-gradient(
+    120deg,
+    #6e5b1f 0%,
+    #bfa44a 25%,
+    #f5e27a 50%,
+    #bfa44a 75%,
+    #6e5b1f 100%
+  );
+}
+
+.coupon-card {
+  position: relative;
+
+  -webkit-mask:
+    radial-gradient(circle 20px at 0 50%, transparent 98%, black 100%),
+    radial-gradient(circle 20px at 100% 50%, transparent 98%, black 100%),
+    linear-gradient(black 0 0);
+  
+  mask:
+    radial-gradient(circle 20px at 0 50%, transparent 98%, black 100%),
+    radial-gradient(circle 20px at 100% 50%, transparent 98%, black 100%),
+    linear-gradient(black 0 0);
+
+  -webkit-mask-composite: destination-out, destination-out, source-over;
+  mask-composite: exclude, exclude, add;
+}

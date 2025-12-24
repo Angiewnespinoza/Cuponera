@@ -30,4 +30,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     .addEventListener('click', openAdminModal);
 });
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+
 await loadTemplate('/templates/confirm-redeem.html');

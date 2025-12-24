@@ -17,7 +17,11 @@ export async function renderCoupons() {
     node.querySelector('[data-count]').textContent = `Cupones disponibles: ${coupon.count}`;
     node.querySelector('#stars-wrapper').id = 'stars-wrapper' + coupon.id;
     node.querySelector('#stars').id = 'stars' + coupon.id;
-    node.querySelector('#tooltip').id = 'tooltip' + coupon.id;
+    // node.querySelector('#tooltip').id = 'tooltip' + coupon.id;
+
+    if(coupon.stars.nivel === 5){
+      node.classList.add('gold');
+    }
 
     const useBtn = node.querySelector('[data-use]');
     useBtn.disabled = coupon.count <= 0;
@@ -35,35 +39,34 @@ export async function renderCoupons() {
 export function renderStars(cupon){
     // Carga de estrellas  
     const rating = cupon.stars.nivel;
-    const tooltipText = cupon.stars.descripcion;
+    // const tooltipText = cupon.stars.descripcion;
     const total = 5;
-    const wrapper = document.querySelector('#stars-wrapper' + cupon.id);
     const starsContainer = document.getElementById('stars' + cupon.id);
-    const tooltip = wrapper.querySelector('#tooltip' + cupon.id);
+    // const tooltip = wrapper.querySelector('#tooltip' + cupon.id);
 
-    tooltip.textContent = tooltipText;
+    // tooltip.firstElementChild.innerHTML = tooltipText;
 
-    starsContainer.innerHTML = '';
+    // starsContainer.innerHTML = '';
 
     // Render estrellas
-    for (let i = 0; i < 5; i++) {
-    const star = document.createElement('span');
-    star.className = 'star' + (i < rating ? ' on' : '');
-    star.textContent = '★';
-    starsContainer.appendChild(star);
+    for (let i = 0; i < total; i++) {
+      const star = document.createElement('span');
+      star.className = 'star' + (i < rating ? ' on' : '');
+      star.textContent = '★';
+      starsContainer.appendChild(star);
     }
 
     // PC: hover
-    wrapper.addEventListener('mouseenter', () => {
-        wrapper.classList.add('show-tooltip');
-    });
+    // wrapper.addEventListener('mouseenter', () => {
+    //     wrapper.classList.add('show-tooltip');
+    // });
 
-    wrapper.addEventListener('mouseleave', () => {
-        wrapper.classList.remove('show-tooltip');
-    });
+    // wrapper.addEventListener('mouseleave', () => {
+    //     wrapper.classList.remove('show-tooltip');
+    // });
 
-    // Mobile: tap
-    wrapper.addEventListener('touchstart', () => {
-        wrapper.classList.toggle('show-tooltip');
-    });
+    // // Mobile: tap
+    // wrapper.addEventListener('touchstart', () => {
+    //     wrapper.classList.toggle('show-tooltip');
+    // });
 }

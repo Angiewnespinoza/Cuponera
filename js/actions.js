@@ -85,11 +85,12 @@ export async function openDetailModal(cupon) {
   node.querySelector('[data-image]').src = coupon.imageUrl;
   node.querySelector('[data-title]').textContent = coupon.title;
   //node.querySelector('[data-category]').textContent = coupon.category || '';
+  node.querySelector('[data-stars]').id = 'starsdetail' + coupon.id;
 
   const list = node.querySelector('[data-description]');
   list.innerHTML = coupon.description;//.map(x => `<li>${x}</li>`).join('');
 
-  node.querySelector('[data-stars]').innerHTML = coupon.stars.descripcion;
+  node.querySelector('[data-restric]').innerHTML = coupon.stars.descripcion;
 
   node.querySelector('[data-use]').onclick = () => handleShare(coupon);
 
@@ -124,4 +125,21 @@ export async function showRedeemedScreen(coupon) {
     await handleUndo();
     closeModal();
   });
+
+  renderStarsDetail(coupon);
+}
+
+export function renderStarsDetail(cupon){
+    // Carga de estrellas  
+    const rating = cupon.stars.nivel;
+    const total = 5;
+    const starsContainer = document.getElementById('starsdetail' + cupon.id);
+
+    // Render estrellas
+    for (let i = 0; i < total; i++) {
+      const star = document.createElement('span');
+      star.className = 'star' + (i < rating ? ' on' : '');
+      star.textContent = '★';
+      starsContainer.appendChild(star);
+    }
 }

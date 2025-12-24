@@ -1,14 +1,14 @@
 {
   "name": "Cuponera",
   "short_name": "Cuponera",
-  "start_url": "/Cuponera/",
-  "scope": "/Cuponera/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
   "icons": [
     {
-      "src": "img/helado.png",
+      "src": "img/cuponerita.png",
       "sizes": "192x192",
       "type": "image/png"
     }
