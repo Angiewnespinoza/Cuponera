@@ -48,6 +48,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 
 .topbar-title{ line-height: 1.1; }
 .topbar-h1{
+    margin-left: 40px;
     font-size: 18px;
     font-weight: 700;
     color: rgb(12 19 41);
