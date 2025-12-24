@@ -21,3 +21,7 @@ export function cloneTemplate(id) {
   if (!tpl) throw new Error(`Template ${id} no encontrado`);
   return tpl.content.firstElementChild.cloneNode(true);
 }
+
+export function getNodeTemplate(id){
+  return document.getElementById(id).tpl.content.firstElementChild;
+}

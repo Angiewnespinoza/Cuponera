@@ -1,5 +1,11 @@
 const API_BASE = 'http://192.168.1.9:3001/api';
 
+const adminCache = {
+  categorias: null,
+  imagenes: null,
+  restricciones: null,
+};
+
 async function apiFetch(url, options = {}) {
   const res = await fetch(API_BASE + url, {
     headers: { 'Content-Type': 'application/json' },
@@ -14,20 +20,30 @@ async function apiFetch(url, options = {}) {
   return res.json();
 }
 
+async function cachedFetch(key, url, force = false) {
+  if (!force && adminCache[key]) {
+    return adminCache[key];
+  }
+
+  const data = await apiFetch(url);
+  adminCache[key] = data;
+  return data;
+}
+
 export function fetchCoupons() {
   return apiFetch('/cupones');
 }
 
-export function fetchImagenes() {
-  return apiFetch('/imagenes');
+export function fetchCategorias(force = false) {
+  return cachedFetch('categorias', '/categorias', force);
 }
 
-export function fetchRestricciones() {
-  return apiFetch('/restricciones');
+export function fetchImagenes(force = false) {
+  return cachedFetch('imagenes', '/imagenes', force);
 }
 
-export function fetchCategorias() {
-  return apiFetch('/categorias');
+export function fetchRestricciones(force = false) {
+  return cachedFetch('restricciones', '/restricciones', force);
 }
 
 export function useCoupon(id) {
@@ -64,4 +80,8 @@ export function uploadImagen(data) {
       img: data.imagen
     })
   });
+}
+
+export function invalidateAdminCache(keys = []) {
+  keys.forEach(k => adminCache[k] = null);
 }

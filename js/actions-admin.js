@@ -1,11 +1,13 @@
 import { loadTemplate, cloneTemplate } from './templates.js';
 import { closeModal, ensureModalRoot } from './actions.js';
+import { renderCoupons } from './render.js';
 import {
   fetchCategorias,
   fetchImagenes,
   fetchRestricciones,
   createCupon,
-  uploadImagen
+  uploadImagen,
+  invalidateAdminCache
 } from './api.js';
 
 const ADMIN_PIN = '1234'; // luego lo movés a backend
@@ -40,7 +42,13 @@ export async function openAdminModal() {
   node.querySelector('[data-close]').onclick = closeModal;
 }
 
-async function initAdminPanel(node) {
+export async function initAdminPanel(node) {
+  await loadAdminData(node);
+  setupTabs(node);
+  setupForms(node);
+}
+
+async function loadAdminData(node) {
   const [cats, imgs, rests] = await Promise.all([
     fetchCategorias(),
     fetchImagenes(),
@@ -50,9 +58,6 @@ async function initAdminPanel(node) {
   fillSelect(node.querySelector('[data-category]'), cats);
   fillSelect(node.querySelector('[data-image]'), imgs);
   fillSelect(node.querySelector('[data-restriction]'), rests);
-
-  setupTabs(node);
-  setupForms(node);
 }
 
 function fillSelect(select, items) {
@@ -82,6 +87,10 @@ function setupForms(node) {
 
     await uploadImagen({ descripcion: desc, imagen: base64 });
 
+    invalidateAdminCache(['imagenes']);
+    
+    await refreshAdminPanel(node);
+
     alert('Imagen subida');
   };
 
@@ -102,6 +111,9 @@ function setupForms(node) {
       imagenId: node.querySelector('[data-image]').value,
       restriccionId: node.querySelector('[data-restriction]').value
     });
+
+    await refreshAdminPanel(adminNode);
+    await renderCoupons(); 
 
     alert('Cupón creado');
   };
@@ -127,4 +139,8 @@ function setupTabs(node) {
   });
 
   tabs[0].click();
+}
+
+export async function refreshAdminPanel(node) {
+  await loadAdminData(node);
 }
