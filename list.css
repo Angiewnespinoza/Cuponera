@@ -68,19 +68,78 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   gap: 12px;
 }
 
-/* Tarjeta cupón */
-.coupon-card{
-  display: grid;
-  grid-template-columns: 74px 1fr auto;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(255,255,255,0.45);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 16px 44px rgba(0,0,0,0.16);
+.col1{
+    grid-column: 1;
+    align-self: center;
 }
+.col2{
+    grid-column: 2;
+    align-self: center;
+}
+.col3{
+    grid-column: 3;
+    align-self: start;
+    text-align: right !important;
+}
+
+.dashed{
+    border-top: 2px dashed rgba(0, 0, 0, 0.13);
+}
+
+/* ===== Ticket shape (mordidas laterales) ===== */
+.coupon-card{
+    position: relative;    
+    /* Apagamos la pintura original de la card */
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    border-radius: 10px;
+    overflow: hidden;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+    display: grid;
+    padding: 10px 20px;
+  }
+  
+  /* Capa de fondo con mordidas */
+  .coupon-card::before,
+  .coupon-card::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  /* Fondo principal + mordida izquierda */
+  .coupon-card::before{
+    background-image: radial-gradient(
+        circle at 0 50%,
+        transparent 20px,
+        rgba(255, 255, 255, 80%) 21px
+      );
+  }
+  
+  /* Mordida derecha */
+  .coupon-card::after{
+    right: 0;
+    background-image: radial-gradient(
+      circle at 100% 50%,
+      transparent 20px,
+      rgba(255, 255, 255, 80%) 21px
+    );
+  }
+
+  .row{
+    display: grid;
+  }
+
+  .row > * {
+    padding:5px;
+    text-align: center;
+  }
+  
 
 .coupon-avatar{
   width: 64px; height: 64px;
@@ -97,44 +156,24 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     padding: 6px;
   }  
 
-/* Pills de categoría */
-.coupon-pill{
-  display: inline-flex;
-  width: fit-content;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 900;
-  border: 1px solid transparent;
-  margin-bottom: 8px;
-}
-  
-
 .coupon-meta{
   font-size: 12px;
-  font-weight: 700;
-  color: rgba(15,23,42,0.75);
 }
 .coupon-meta b{
   color: rgba(15,23,42,0.95);
 }
 
-/* Botones */
-.coupon-right{
-  display: grid;
-  gap: 8px;
-  justify-items: end;
+.coupon-title{
+    font-size: larger;
 }
-.coupon-right.two-buttons{ width: 110px; }
 
 .btn{
   border: 0;
   border-radius: 999px;
-  padding: 10px 12px;
+  padding: 5px;
   font-size: 12px;
-  font-weight: 950;
   cursor: pointer;
-  width: 100%;
+  width: 70%;
 }
 
 .btn-primary{
@@ -143,10 +182,9 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   box-shadow: 0 14px 24px rgba(22,163,74,0.22);
 }
 
-.btn-secondary{
-  color: rgba(15,23,42,0.85);
-  background: rgba(255,255,255,0.80);
-  border: 1px solid rgba(2,132,199,0.20);
+.btn-info{
+    background-color: transparent;
+    border: none;
 }
 
 /* Bottom nav */
