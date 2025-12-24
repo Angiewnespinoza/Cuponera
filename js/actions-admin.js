@@ -1,5 +1,5 @@
 import { loadTemplate, cloneTemplate } from './templates.js';
-import { closeModal } from './actions.js';
+import { closeModal, ensureModalRoot } from './actions.js';
 import {
   fetchCategorias,
   fetchImagenes,
@@ -13,7 +13,7 @@ const ADMIN_PIN = '1234'; // luego lo movés a backend
 export async function openAdminModal() {
   await loadTemplate('/templates/modal-admin.html');
 
-  const root = document.getElementById('modal-root');
+  const root = ensureModalRoot();
   const content = root.querySelector('.modal-content');
 
   root.classList.remove('hidden');
@@ -73,7 +73,7 @@ function setupForms(node) {
     const desc = node.querySelector('[data-img-desc]').value;
     const file = node.querySelector('[data-img-file]').files[0];
 
-    if (!file || !descripcion) {
+    if (!file || !desc) {
         alert('Faltan datos');
         return;
     }

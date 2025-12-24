@@ -19,5 +19,5 @@ export async function loadTemplate(path) {
 export function cloneTemplate(id) {
   const tpl = document.getElementById(id);
   if (!tpl) throw new Error(`Template ${id} no encontrado`);
-  return tpl.content.cloneNode(true);
+  return tpl.content.firstElementChild.cloneNode(true);
 }

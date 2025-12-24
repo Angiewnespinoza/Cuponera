@@ -35,7 +35,7 @@ function escapeHtml(s) {
 }
 
 /* ---- Modales / pantallas ---- */
-function ensureModalRoot() {
+export function ensureModalRoot() {
   let root = document.getElementById('modal-root');
   if (!root) {
     root = document.createElement('div');
