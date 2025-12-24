@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cuponera-cache-v2';
+const CACHE_NAME = 'cuponera-cache-v2.0.2';
 
 const ASSETS = [
   '/Cuponera/index.html',
