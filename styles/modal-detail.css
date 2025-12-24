@@ -52,6 +52,11 @@
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 999px;
+}
+
+/* ===== Detail description ===== */
+
+.detail-desc {
   margin-bottom: 14px;
 }
 

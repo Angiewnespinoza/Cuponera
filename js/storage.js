@@ -9,6 +9,7 @@ export async function loadState() {
       id: c.id,
       title: c.titulo,
       description: c.descripcion,
+      category: c.categoria,
       stars: c.restriccion,
       count: c.usos,
       imageUrl: c.imagen?.img || ''

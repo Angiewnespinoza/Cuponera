@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCoupons();
   } catch (e) {
     alert(e.message);
+    console.log(e);
   }
 
 });

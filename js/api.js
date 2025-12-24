@@ -1,4 +1,7 @@
-const API_BASE = 'http://192.168.1.9:3001/api';
+//LOCAL
+// const API_BASE = 'http://192.168.1.9:3001/api';
+//PROD
+const API_BASE = 'https://srv416103.hstgr.cloud/api';
 
 const adminCache = {
   categorias: null,

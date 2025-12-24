@@ -84,10 +84,12 @@ export async function openDetailModal(cupon) {
 
   node.querySelector('[data-image]').src = coupon.imageUrl;
   node.querySelector('[data-title]').textContent = coupon.title;
-  node.querySelector('[data-category]').textContent = coupon.categoria || '';
+  //node.querySelector('[data-category]').textContent = coupon.category || '';
 
   const list = node.querySelector('[data-description]');
   list.innerHTML = coupon.description;//.map(x => `<li>${x}</li>`).join('');
+
+  node.querySelector('[data-stars]').innerHTML = coupon.stars.descripcion;
 
   node.querySelector('[data-use]').onclick = () => handleShare(coupon);
 
