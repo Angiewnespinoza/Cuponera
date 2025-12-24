@@ -3,14 +3,14 @@ const loaded = new Set();
 export async function loadTemplate(path) {
   if (document.querySelector(`template[data-src="${path}"]`)) return;
 
-  const res = await fetch(path);
+  const res = await fetch('/Cuponera' + path);
   const html = await res.text();
 
   const wrapper = document.createElement('div');
   wrapper.innerHTML = html;
 
   wrapper.querySelectorAll('template').forEach(t => {
-    t.dataset.src = path;
+    t.dataset.src = '/Cuponera' + path;
     document.body.appendChild(t);
   });
 }
