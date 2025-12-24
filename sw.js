@@ -1,11 +1,11 @@
 const CACHE_NAME = 'cuponera-cache-v1';
 
 const ASSETS = [
-  '/cuponerita/index.html',
-  '/cuponerita/app.js',
-  '/cuponerita/manifest.webmanifest',
-  '/cuponerita/img/background.png',
-  '/cuponerita/img/cuponerita.png'
+  '/Cuponera/index.html',
+  '/Cuponera/app.js',
+  '/Cuponera/manifest.webmanifest',
+  '/Cuponera/img/background.png',
+  '/Cuponera/img/cuponerita.png'
 ];
 
 self.addEventListener('install', event => {
