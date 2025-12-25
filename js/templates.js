@@ -2,8 +2,11 @@ const loaded = new Set();
 
 export async function loadTemplate(path) {
   if (document.querySelector(`template[data-src="${path}"]`)) return;
-
+  //LOCAL
+  // const res = await fetch(path);
+  //PROD
   const res = await fetch('/Cuponera' + path);
+  
   const html = await res.text();
 
   const wrapper = document.createElement('div');

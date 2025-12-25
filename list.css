@@ -30,9 +30,9 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   gap: 10px;
   padding: 10px 10px 12px;
   border-radius: 22px;
-  background: rgba(255,255,255,80%);
-  margin-bottom: 12px;
+  /* background: rgba(255,255,255,80%); */
   border-radius: 0 0 30px 15px;
+  /* color: white; */
 }
 
 .icon-btn{
@@ -51,7 +51,8 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     margin-left: 40px;
     font-size: 18px;
     font-weight: 700;
-    color: rgb(12 19 41);
+    color: rgb(255 255 255);
+    filter: drop-shadow(2px 4px 6px black);
 }
 
 /* Lista */
@@ -112,7 +113,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     background-image: radial-gradient(
         circle at 0 50%,
         transparent 20px,
-        rgba(255, 255, 255, 80%) 21px
+        rgba(255, 255, 255, 100%) 21px
       );
   }
   
@@ -122,7 +123,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
     background-image: radial-gradient(
       circle at 100% 50%,
       transparent 20px,
-      rgba(255, 255, 255, 80%) 21px
+      rgba(255, 255, 255, 100%) 21px
     );
   }
 
@@ -240,44 +241,100 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   font-size: 18px;
   cursor: pointer;
   margin-left: auto;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgb(255 255 255 / 35%);
   border-radius: 22px;
   padding: 3px 3px;
+  filter: drop-shadow(2px 4px 6px black);
 }
 
 .btn-admin:hover {
   opacity: 1;
 }
 
-
+.coupon-card.gold::after{
+  width: auto;
+}
 /* LE cupon dorado */
 .coupon-card.gold::before{
-  background-image: radial-gradient(
-      circle at 0 50%,
-      transparent 20px,
-      rgba(191, 164, 74, 0.9) 21px,
-      rgba(191, 164, 74, 0.9) 21px
-    );
-}
+--b: 4px; /* grosor del borde */
 
+  content:"";
+  position:absolute;
+  inset:0;
+  padding: var(--b);
+  border-radius: var(--r);
+  pointer-events:none;
 
-.coupon-card.gold::after{
-  background-image: radial-gradient(
-      circle at 100% 50%,
-      transparent 20px,
-      rgba(191, 164, 74, 0.9) 21px
-    );
+  background: linear-gradient(135deg,
+    #ffffff 0%,
+    #ffeaa2 20%,
+    #f2c14e 45%,
+    #b97a13 70%,
+    #fff1b8 100%
+  );
+
+  /* recorta el centro: queda solo el borde */
+  -webkit-mask:
+    /* forma externa con mordida */
+    radial-gradient(circle at 0 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)) left/50% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)) right/50% 100% no-repeat,
+    linear-gradient(#000 0 0),
+    /* hueco interior */
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask-composite: source-over, source-over, source-over, xor;
+
+  /* Firefox (mejorable según caso) */
+  mask:
+    radial-gradient(circle at 0 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)) left/50% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)) right/50% 100% no-repeat,
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0) content-box;
+  mask-composite: add, add, add, exclude;
+  width: auto;
 }
 
 .coupon-card.gold { 
-  background: linear-gradient(
-    120deg,
-    #6e5b1f 0%,
-    #bfa44a 25%,
-    #f5e27a 50%,
-    #bfa44a 75%,
-    #6e5b1f 100%
-  );
+--r: 18px;      /* radio esquinas */
+  --bite: 22px;   /* tamaño mordida */
+
+  position: relative;
+  border-radius: var(--r);
+  overflow: visible; /* importante, la mask maneja el recorte */
+  padding: 14px 18px;
+  display: grid;
+
+  /* Fondo dorado */
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.35), transparent 55%),
+    linear-gradient(135deg,
+      #fff3c4 0%,
+      #f7d774 18%,
+      #e7b950 35%,
+      #c9972b 50%,
+      #e7b950 68%,
+      #f7d774 85%,
+      #fff3c4 100%
+    );
+
+  /* Mordidas (AGUJEROS reales) */
+  -webkit-mask:
+    /* base rect con bordes redondeados */
+    linear-gradient(#000 0 0),
+    /* agujero izquierda */
+    radial-gradient(circle at 0 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)),
+    /* agujero derecha */
+    radial-gradient(circle at 100% 50%, transparent var(--bite), #000 calc(var(--bite) + 1px));
+  -webkit-mask-composite: source-in, source-in, source-in;
+
+  /* Firefox */
+  mask:
+    linear-gradient(#000 0 0),
+    radial-gradient(circle at 0 50%, transparent var(--bite), #000 calc(var(--bite) + 1px)),
+    radial-gradient(circle at 100% 50%, transparent var(--bite), #000 calc(var(--bite) + 1px));
+  mask-composite: intersect;
+
+  /* Sombra linda */
+  box-shadow: 0 8px 18px rgba(0,0,0,.20);
 }
 
 .coupon-card {
@@ -295,4 +352,9 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 
   -webkit-mask-composite: destination-out, destination-out, source-over;
   mask-composite: exclude, exclude, add;
+}
+
+#coupon-list {
+      background-color: #bcbcbc8c;
+    padding-top: 24px;
 }

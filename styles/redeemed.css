@@ -107,9 +107,13 @@
 }
 
 .coupon-image {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
+    width: 210px;
+    /* height: 176px; */
+    object-fit: contain;
+    border: 1px solid white;
+    /* filter: drop-shadow(-13px 19px 40px white); */
+    box-shadow: 0 0 76px 69px #ffffff;
+    border-radius: 999px;
 }
 
 .btn-primary.redeemed{
